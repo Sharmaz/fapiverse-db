@@ -1,0 +1,24 @@
+{
+  "name": "fapiverse-db",
+  "version": "1.0.0",
+  "description": "A Simple IoT Platform - DB Module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sharmaz/fapiverse-db.git"
+  },
+  "author": "Ivan Robles <irae45@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sharmaz/fapiverse-db/issues"
+  },
+  "homepage": "https://github.com/Sharmaz/fapiverse-db#readme",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.11.0"
+  }
+}
