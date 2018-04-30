@@ -21,6 +21,13 @@ const id = 1;
 let AgentStub = null;
 let db = null;
 let sandbox = null;
+const uuid = 'yyy-yyy-yyy';
+
+const uuidArgs = {
+  where: {
+    uuid,
+  },
+};
 
 test.beforeEach(async () => {
   // Creamos un sandbox
@@ -31,11 +38,23 @@ test.beforeEach(async () => {
     hasMany: sandbox.spy(),
   };
 
-  // Función findById como Stub en el modelo
+  // Función findOne como stub del modelo
+  AgentStub.findOne = sandbox.stub();
+
+  // Cuando se llame vamos a retornar la promesa por medio de los fixtures y el uuid
+  AgentStub.findOne.withArgs(uuidArgs).returns(Promise.resolve(agentFixtures.byUuid(uuid)));
+
+  // Función findById como Stub del modelo
   AgentStub.findById = sandbox.stub();
 
   // Cuando la función se llame con el id va a retornar una promesa con agentFixtures y el id
   AgentStub.findById.withArgs(id).returns(Promise.resolve(agentFixtures.byId(id)));
+
+  // Función update como stup del modelo
+  AgentStub.update = sandbox.stub();
+
+  // Cuando se llame vamos a retornar la promesa
+  AgentStub.update.withArgs(single, uuidArgs).returns(Promise.resolve(single));
 
   // Requerimos los modelos de agent y metric con proxyquire
   const setupDatabase = proxyquire('../', {
@@ -84,4 +103,19 @@ test.serial('Agent#findById', async (t) => {
   t.true(AgentStub.findById.calledOnce, 'findById should be called once');
   t.true(AgentStub.findById.calledWith(id), 'findById should be called with id');
   t.deepEqual(agent, agentFixtures.byId(id), 'Should be the same');
+});
+
+// Test para los update de Agent
+test.serial('Agent#createOrUpdate - Exist', async (t) => {
+  const agent = await db.Agent.createOrUpdate(single);
+
+  /**
+   * Testeamos que findOne sea llamada, sea llamada 2 veces
+   * update va a cer llamada una vez
+   * update en agent y single van a ser iguales
+   */
+  t.true(AgentStub.findOne.called, 'findOne should be called on Model');
+  t.true(AgentStub.findOne.calledTwice, 'findOne should be called twice');
+  t.true(AgentStub.update.calledOnce, 'update should be called once');
+  t.deepEqual(agent, single, 'Should be the same');
 });
