@@ -5,6 +5,7 @@ const defaults = require('defaults');
 
 // Exportamos el modulo
 module.exports = async function db(config) {
+  // Seteamos la configuración de prueba con defaults
   config = defaults(config, {
     dialect: 'sqlite',
     pool: {
