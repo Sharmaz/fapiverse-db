@@ -3,11 +3,15 @@ const setupAgentModel = require('./models/agent');
 const setupMetricModel = require('./models/metric');
 const setupAgent = require('./lib/agent');
 const defaults = require('defaults');
+const Sequelize = require('sequelize');
+
+const { Op } = Sequelize;
 
 // Exportamos el modulo
 module.exports = async function db(config) {
   // Seteamos la configuración de prueba con defaults
   config = defaults(config, {
+    operatorsAliases: Op,
     dialect: 'sqlite',
     pool: {
       max: 10,
